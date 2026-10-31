@@ -1,0 +1,63 @@
+/* Resource content keeps the theme's colors and spacing. */
+.game-article-cover {
+  width: 100%;
+  max-width: 960px;
+  margin-inline: auto;
+}
+.custom-md .resource-downloads {
+  margin: 1rem 0 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line-divider);
+  border-radius: var(--radius-large);
+  background: var(--btn-regular-bg);
+}
+.custom-md .resource-downloads > p {
+  margin: 0 0 1rem;
+}
+.resource-download-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.custom-md a.resource-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  min-width: 7rem;
+  max-width: 100%;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.75rem;
+  background: var(--primary);
+  color: oklch(0.20 0.02 var(--hue));
+  font-weight: 650;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.custom-md a.resource-download:hover {
+  filter: brightness(1.08);
+}
+.custom-md .game-screenshot {
+  margin: 1.5rem 0;
+}
+.custom-md .game-screenshot img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 0.75rem;
+}
+.custom-md .missing-media {
+  padding: 2rem 1rem;
+  margin: 1rem 0;
+  border: 1px dashed var(--line-divider);
+  border-radius: 0.75rem;
+  text-align: center;
+  color: var(--content-meta);
+}
+@media (max-width: 480px) {
+  .resource-download-actions > a {
+    width: 100%;
+  }
+}

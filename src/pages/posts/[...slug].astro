@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import GamePost from "@/components/layout/GamePost.astro";
+import { getSortedPosts } from "@/utils/content-utils";
+import { getPostUrlBySlug, removeFileExtension } from "@/utils/url-utils";
+
+export const getStaticPaths = (async () => {
+	const posts = await getSortedPosts();
+	return posts.map((entry) => ({
+		params: { slug: removeFileExtension(entry.id) },
+		props: { entry },
+	}));
+}) satisfies GetStaticPaths;
+
+interface Props {
+	entry: CollectionEntry<"posts">;
+}
+
+const { entry } = Astro.props;
+// 已迁移文章保留 WordPress 根路径为唯一正文地址；未迁移文章仍使用原路由。
+if (entry.data.legacySlug) {
+	return Astro.redirect(getPostUrlBySlug(entry.id), 301);
+}
+---
+
+<GamePost entry={entry} />

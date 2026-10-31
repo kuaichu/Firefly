@@ -1,0 +1,115 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import GameYearFilter from "@/components/layout/GameYearFilter.astro";
+import PostCard from "@/components/layout/PostCard.astro";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getSortedPosts } from "@/utils/content-utils";
+import { getPostUrlBySlug, url } from "@/utils/url-utils";
+
+export const getStaticPaths = (async () => {
+	const allPosts = await getSortedPosts();
+	const groups = new Map<number, CollectionEntry<"posts">[]>();
+	for (const post of allPosts) {
+		const year = post.data.gameYear;
+		if (year === undefined) continue;
+		if (!groups.has(year)) groups.set(year, []);
+		groups.get(year)?.push(post);
+	}
+	return [...groups.entries()].map(([year, posts]) => ({
+		params: { year: String(year) },
+		props: { year, posts },
+	}));
+}) satisfies GetStaticPaths;
+
+interface Props {
+	year: number;
+	posts: CollectionEntry<"posts">[];
+}
+
+const { year, posts } = Astro.props;
+const title = `${year} 年发行的游戏`;
+---
+
+<MainGridLayout title={title} description={`${year} 年发行的 ${posts.length} 部 GalGame 资源。`}>
+  <header class="card-base year-heading">
+    <p class="filter-label">当前筛选 · 游戏发行年份</p>
+    <h2>{title}</h2>
+    <p>共 {posts.length} 部游戏</p>
+    <a href={url("/")}>← 返回全部资源</a>
+  </header>
+  <GameYearFilter currentYear={year} />
+  <div class="year-posts grid-mode" aria-label={`${year} 年游戏资源`}>
+    {
+      posts.map((entry, index) => (
+        <PostCard
+          entry={entry}
+          title={entry.data.title}
+          tags={entry.data.tags}
+          category={entry.data.category}
+          published={entry.data.published}
+          updated={entry.data.updated}
+          url={getPostUrlBySlug(entry.id)}
+          image={entry.data.image}
+          description={entry.data.description}
+          draft={entry.data.draft}
+          pinned={entry.data.pinned}
+          password={!!entry.data.password}
+          loading={index < 2 ? "eager" : "lazy"}
+          style=""
+        />
+      ))
+    }
+  </div>
+</MainGridLayout>
+
+<style>
+  .year-heading {
+    margin-bottom: 1rem;
+    padding: 1.5rem;
+  }
+
+  .year-heading h2 {
+    margin: 0.25rem 0 0.5rem;
+    color: var(--primary);
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .filter-label {
+    font-size: 0.8rem;
+  }
+
+  .year-heading a {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--primary);
+  }
+
+  .year-heading a:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
+
+  .year-posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+    --grid-card-padding: 1rem;
+  }
+
+  .year-posts :global(.post-card-content) {
+    padding: 1rem !important;
+  }
+
+  .year-posts :global(.post-card-title) {
+    font-size: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .year-posts :global(.post-card-title::before) {
+    display: none;
+  }
+</style>

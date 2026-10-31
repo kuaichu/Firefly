@@ -1,0 +1,159 @@
+{
+  "note": "Historical WordPress media damage. The site now uses local replacement images from matched VNDB and official Steam store records; damaged originals and original backups remain preserved.",
+  "invalid_original_images": [
+    "wp-content/uploads/2024/05/bEsWu.jpg",
+    "wp-content/uploads/2024/05/bETMy.jpg",
+    "wp-content/uploads/2024/05/bEV7r.jpg",
+    "wp-content/uploads/2024/05/c37504680390f.webp",
+    "wp-content/uploads/2024/05/c7122e270b8740a2a1f9ea3ee6b6c54f.jpg",
+    "wp-content/uploads/2024/05/c911c05b47b91.webp",
+    "wp-content/uploads/2024/05/cjtg.png",
+    "wp-content/uploads/2024/05/cjxd.png",
+    "wp-content/uploads/2024/05/ctdzy.png",
+    "wp-content/uploads/2024/05/d0d079f4148d1.webp",
+    "wp-content/uploads/2024/05/d12c18bc5c9543ac99716062137b5b77.jpg",
+    "wp-content/uploads/2024/05/d2b171dd48e65093379fd1b619eaa74d.jpg",
+    "wp-content/uploads/2024/05/d320cfa5c4cf0d2483c6e10d365c147d.jpg",
+    "wp-content/uploads/2024/05/d985b01a928f52c9.jpg",
+    "wp-content/uploads/2024/05/dddd726ec3dec251ad6b0c380c96d646.webp",
+    "wp-content/uploads/2024/05/e0c5f0af0d8a7296fb038f3d1e9eacfe.jpg",
+    "wp-content/uploads/2024/05/e275b88009449c6a509bd9fcd2cc3cde.webp",
+    "wp-content/uploads/2024/05/e350de52a935cc60f6f136fcabf032bb.jpg",
+    "wp-content/uploads/2024/05/e681a0bb9d04e.webp",
+    "wp-content/uploads/2024/05/ec037caebae2d.webp",
+    "wp-content/uploads/2024/05/ec904c74d6f6e.png",
+    "wp-content/uploads/2024/05/eden.png",
+    "wp-content/uploads/2024/05/ef12d9bae10327791d8d58f47005273e.webp",
+    "wp-content/uploads/2024/05/f34888128292ab7b.jpg",
+    "wp-content/uploads/2024/05/f3c885cb7997420296680e7b918dd2e6.jpg",
+    "wp-content/uploads/2024/05/f5fb29006f98f980.jpg",
+    "wp-content/uploads/2024/05/f613795939c31.png",
+    "wp-content/uploads/2024/05/f83218c52823901c5dd8c06eb983ee9e.png",
+    "wp-content/uploads/2024/05/FA0B9612-D3EA-4425-B2D6-F9815098CC3F.jpg",
+    "wp-content/uploads/2024/05/fa6cab6b795565a5.jpg",
+    "wp-content/uploads/2024/05/ftl.png",
+    "wp-content/uploads/2024/05/GEZE1WAEG9VPG9.png",
+    "wp-content/uploads/2024/05/gjqydjwq.png",
+    "wp-content/uploads/2024/05/hldy.png",
+    "wp-content/uploads/2024/05/jzjh.png",
+    "wp-content/uploads/2024/05/kanon.png",
+    "wp-content/uploads/2024/05/kud.png",
+    "wp-content/uploads/2024/05/LD43TV8DZDJ57E22RG.png",
+    "wp-content/uploads/2024/05/lu.png",
+    "wp-content/uploads/2024/05/mndyy.png",
+    "wp-content/uploads/2024/05/noble-works-1920x1080-wallpaper_www.wallpaperhi.com_14.jpg",
+    "wp-content/uploads/2024/05/plane.png",
+    "wp-content/uploads/2024/05/Q1WSGEHHT9XBKZ8.png",
+    "wp-content/uploads/2024/05/q6E9S.jpg",
+    "wp-content/uploads/2024/05/q6Fpd.jpg",
+    "wp-content/uploads/2024/05/q6OIp.jpg",
+    "wp-content/uploads/2024/05/q6Xix.jpg",
+    "wp-content/uploads/2024/05/rewrite.png"
+  ],
+  "original_unavailable_covers": [
+    {
+      "postId": 101,
+      "title": "【汉化】Re:LieF ～献给亲爱的你～"
+    },
+    {
+      "postId": 138,
+      "title": "【汉化】魔女的夜宴"
+    },
+    {
+      "postId": 170,
+      "title": "【汉化】寄宿之恋"
+    },
+    {
+      "postId": 174,
+      "title": "【汉化】Friend to Lover"
+    },
+    {
+      "postId": 221,
+      "title": "【汉化】共结情缘的剑舞恋曲"
+    },
+    {
+      "postId": 236,
+      "title": "【汉化】春季限定"
+    },
+    {
+      "postId": 277,
+      "title": "【汉化】EDEN*"
+    },
+    {
+      "postId": 284,
+      "title": "【汉化】家族计画"
+    },
+    {
+      "postId": 297,
+      "title": "【汉化】CLANNAD"
+    },
+    {
+      "postId": 304,
+      "title": "【汉化】Summer Pockets"
+    },
+    {
+      "postId": 323,
+      "title": "【汉化】Phantom -PHANTOM OF INFERNO 幻灵地狱"
+    },
+    {
+      "postId": 376,
+      "title": "【汉化】春天的足音"
+    },
+    {
+      "postId": 432,
+      "title": "【汉化】天色幻想岛"
+    },
+    {
+      "postId": 447,
+      "title": "【汉化】Noble☆Works"
+    },
+    {
+      "postId": 452,
+      "title": "【汉化】DRACU-RIOT!"
+    },
+    {
+      "postId": 463,
+      "title": "【汉化】白色相簿2"
+    },
+    {
+      "postId": 511,
+      "title": "【汉化】LUNARiA 恋月物语"
+    },
+    {
+      "postId": 517,
+      "title": "【汉化】LOOPERS"
+    },
+    {
+      "postId": 523,
+      "title": "【汉化】星之梦"
+    },
+    {
+      "postId": 533,
+      "title": "【汉化】Rewrite"
+    },
+    {
+      "postId": 538,
+      "title": "【汉化】库特wafter"
+    },
+    {
+      "postId": 554,
+      "title": "【汉化】Kanon"
+    },
+    {
+      "postId": 74,
+      "title": "【汉化】苍蓝彼端的四重奏"
+    },
+    {
+      "postId": 95,
+      "title": "【汉化】超级糖果~王道自有王道的理由!"
+    }
+  ],
+  "unavailable_covers": [],
+  "repairs": {
+    "manifest": "src/data/media-repairs.json",
+    "games": 30,
+    "covers": 24,
+    "screenshots": 48,
+    "remainingPlaceholderSlots": 0
+  }
+}

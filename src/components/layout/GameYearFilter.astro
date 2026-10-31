@@ -1,0 +1,120 @@
+---
+import { getSortedPostsList } from "@/utils/content-utils";
+import { url } from "@/utils/url-utils";
+
+interface Props {
+	currentYear?: number;
+	indexPage?: boolean;
+}
+
+const { currentYear, indexPage = false } = Astro.props;
+const posts = await getSortedPostsList();
+const counts = new Map<number, number>();
+
+for (const post of posts) {
+	const year = post.data.gameYear;
+	if (year === undefined) continue;
+	counts.set(year, (counts.get(year) ?? 0) + 1);
+}
+
+const years = [...counts.entries()].sort(([a], [b]) => b - a);
+const total = years.reduce((sum, [, count]) => sum + count, 0);
+---
+
+<section class="card-base year-filter" aria-label="游戏发行年份筛选">
+  <div class="year-filter-heading">
+    <h2>{currentYear ? "切换发行年份" : "按发行年份找游戏"}</h2>
+    {!indexPage && <a href={url("/years/")}>年份目录 →</a>}
+  </div>
+  <p class="year-filter-summary text-75">
+    {years.length} 个年份 · {total} 部游戏已标注发行年份。未标注的资源可在首页查看。
+  </p>
+  <nav class="year-links" aria-label="选择游戏发行年份">
+    <a class="year-link" href={url("/")}>全部资源</a>
+    {
+      years.map(([year, count]) => (
+        <a
+          class:list={["year-link", { selected: year === currentYear }]}
+          href={url(`/years/${year}/`)}
+          aria-current={year === currentYear ? "page" : undefined}
+        >
+          <span>{year} 年</span>
+          <span class="year-count" aria-label={`${count} 部游戏`}>{count}</span>
+        </a>
+      ))
+    }
+  </nav>
+  {years.length === 0 && <p class="year-filter-empty text-75">暂时没有已标注发行年份的游戏。</p>}
+</section>
+
+<style>
+  .year-filter {
+    margin-bottom: 1rem;
+    padding: 1.25rem;
+  }
+
+  .year-filter-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
+  h2 {
+    color: var(--primary);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .year-filter-heading a {
+    color: var(--primary);
+    font-size: 0.875rem;
+  }
+
+  .year-filter-summary,
+  .year-filter-empty {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .year-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .year-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+    border-radius: 0.75rem;
+    color: var(--primary);
+    font-size: 0.9rem;
+  }
+
+  .year-link:hover,
+  .year-link.selected {
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    border-color: var(--primary);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
+
+  .year-link.selected {
+    font-weight: 700;
+  }
+
+  .year-count {
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+</style>

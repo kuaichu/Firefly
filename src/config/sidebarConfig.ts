@@ -1,0 +1,120 @@
+import type { SidebarLayoutConfig } from "../types/sidebarConfig";
+
+/**
+ * 侧边栏布局配置
+ */
+export const sidebarLayoutConfig: SidebarLayoutConfig = {
+	// 是否启用侧边栏功能
+	enable: true,
+
+	// 侧边栏位置：
+	// left: 仅显示左侧边栏
+	// right: 仅显示右侧边栏
+	// both: 双侧边栏，1280px以上同时显示左右，769-1279px根据tabletSidebar配置显示其中一侧
+	position: "left",
+
+	// 平板端(769-1279px)显示哪侧侧边栏，仅position为both时生效
+	// left: 平板端显示左侧边栏
+	// right: 平板端显示右侧边栏
+	tabletSidebar: "left",
+
+	// 文章详情页隐藏侧边栏，设为 true 则只在首页等非文章页显示
+	hideSidebarOnPostPage: false,
+
+	// 本页没有侧栏列时，内容栏占「侧栏 + 内容栏」总宽的比例（0–1），不设置或 ≥1 则铺满
+	noSidebarContentWidth: 1,
+
+	// 左侧边栏组件配置列表
+	// 组件的渲染顺序完全取决于它们在配置数组中出现的顺序，但top的组件会优先于sticky位置的组件渲染
+	// type 组件类型
+	// enable 是否启用该组件
+	// showTitle 是否显示该组件标题，默认true
+	// position 组件位置：top固定顶部，sticky粘性定位(会跟随页面滚动)
+	// showOnPostPage 是否在文章详情页显示该组件
+	// hideOnNonPostPage 是否在非文章详情页隐藏该组件（true=仅文章详情页显示）
+	// specificConfig 组件专属配置
+	leftComponents: [
+		{
+			// 组件类型：公告组件
+			type: "announcement",
+			// 是否启用该组件
+			enable: true,
+			// 组件位置
+			position: "top",
+			// 是否在文章详情页显示
+			showOnPostPage: true,
+		},
+		{
+			// 组件类型：分类组件
+			type: "categories",
+			// 是否启用该组件
+			enable: true,
+			// 组件位置
+			position: "sticky",
+			// 是否在文章详情页显示
+			showOnPostPage: true,
+			// 组件专属配置
+			specificConfig: {
+				// 折叠阈值：当分类数量超过>5个时自动折叠
+				collapseThreshold: 5,
+			},
+		},
+		{
+			// 组件类型：标签组件
+			type: "tags",
+			// 是否启用该组件
+			enable: true,
+			// 组件位置
+			position: "sticky",
+			// 是否在文章详情页显示
+			showOnPostPage: true,
+			// 组件专属配置
+			specificConfig: {
+				// 折叠阈值：当标签数量超过>10个时自动折叠
+				collapseThreshold: 10,
+			},
+		},
+	],
+
+	// 右侧边栏组件配置列表
+	rightComponents: [],
+
+	// 移动端底部组件配置列表
+	// 这些组件只在移动端(<768px)显示在页面底部，独立于左右侧边栏配置
+	mobileBottomComponents: [
+		{
+			// 组件类型：公告组件
+			type: "announcement",
+			// 是否启用该组件
+			enable: true,
+			// 是否在文章详情页显示
+			showOnPostPage: true,
+		},
+		{
+			// 组件类型：分类组件
+			type: "categories",
+			// 是否启用该组件
+			enable: true,
+			// 是否在文章详情页显示
+			showOnPostPage: true,
+			// 组件专属配置
+			specificConfig: {
+				// 折叠阈值：当分类数量超过5个时自动折叠
+				collapseThreshold: 5,
+			},
+		},
+		{
+			// 组件类型：标签组件
+			type: "tags",
+			// 是否启用该组件
+			enable: true,
+			// 是否在文章详情页显示
+			showOnPostPage: true,
+			// 组件专属配置
+			specificConfig: {
+				// 折叠阈值：当标签数量超过20个时自动折叠
+				collapseThreshold: 10,
+			},
+		},
+	],
+};

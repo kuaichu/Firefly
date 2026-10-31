@@ -1,0 +1,21 @@
+[Unit]
+Description=GalGame read-only search and download API
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+EnvironmentFile=-/etc/galgame-api.env
+ExecStart=/usr/bin/python3 /opt/galgame-api/game-api.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+StateDirectory=galgame-api
+MemoryMax=128M
+TasksMax=32
+
+[Install]
+WantedBy=multi-user.target

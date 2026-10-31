@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import GamePost from "@/components/layout/GamePost.astro";
+import { getSortedPosts } from "@/utils/content-utils";
+
+export const getStaticPaths = (async () => {
+	const posts = await getSortedPosts();
+	return posts.flatMap((entry) =>
+		entry.data.legacySlug
+			? [{ params: { legacy: entry.data.legacySlug }, props: { entry } }]
+			: [],
+	);
+}) satisfies GetStaticPaths;
+
+interface Props {
+	entry: CollectionEntry<"posts">;
+}
+
+const { entry } = Astro.props;
+---
+
+<GamePost entry={entry} />

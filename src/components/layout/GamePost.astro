@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import CoverImage from "@/components/common/CoverImage.astro";
 import PostMetadata from "@/components/layout/PostMeta.astro";
+import GameResources from "@/components/layout/GameResources.astro";
 import RecommendedPost from "@/components/misc/RecommendedPost.astro";
 import SeriesNav from "@/components/misc/SeriesNav.astro";
 import SharePoster from "@/components/misc/SharePoster.svelte";
@@ -55,7 +56,10 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { Content, headings } = await render(entry);
+const { Content, headings: contentHeadings } = await render(entry);
+const headings = [...contentHeadings];
+if (entry.data.screenshots?.length) headings.push({ depth: 2, slug: "game-screenshots", text: "游戏截图" });
+if (entry.data.downloads !== undefined) headings.push({ depth: 2, slug: "game-downloads", text: "下载资源" });
 
 const { remarkPluginFrontmatter } = await render(entry);
 
@@ -421,6 +425,7 @@ const seriesData = await getSeriesPosts(entry);
         <EncryptedPost password={entry.data.password} slug={entry.id} hint={entry.data.passwordHint}>
           <Markdown class="mb-6 markdown-content onload-animation">
             <Content />
+            <GameResources entry={entry} />
           </Markdown>
 
           {/* 打赏按钮 & 分享按钮 */}
@@ -511,6 +516,7 @@ const seriesData = await getSeriesPosts(entry);
         <>
           <Markdown class="mb-6 markdown-content onload-animation">
             <Content />
+            <GameResources entry={entry} />
           </Markdown>
 
           {/* 打赏按钮 & 分享按钮 */}

@@ -63,11 +63,12 @@ const addRedirect = (source, target, status = 301) => {
 };
 
 for (const [postId, slug] of Object.entries(legacy.posts)) {
-	addRedirect(`/posts/${encodedPathSegment(postId)}/`, `/${encodedPathSegment(slug)}/`);
+	const target = `/${encodedPathSegment(slug)}/`;
+	if (await isStaticRoute(target)) addRedirect(`/posts/${encodedPathSegment(postId)}/`, target);
 }
 
 for (const [oldSlug, slug] of Object.entries(legacy.oldSlugs)) {
-	if (!Object.values(legacy.posts).includes(oldSlug)) {
+	if (!Object.values(legacy.posts).includes(oldSlug) && await isStaticRoute(`/${encodedPathSegment(slug)}/`)) {
 		addRedirect(`/${encodedPathSegment(oldSlug)}/`, `/${encodedPathSegment(slug)}/`);
 	}
 }
@@ -115,6 +116,9 @@ await writeFile(path.join(dist, "_headers"), `/*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 /covers/*

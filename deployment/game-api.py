@@ -30,7 +30,7 @@ def validate_catalog(data):
     for post in data["posts"]:
         if not isinstance(post, dict) or not isinstance(post.get("downloads"), list):
             raise ValueError("Invalid post")
-        if not isinstance(post["id"], str) or post["id"] in ids or not all(re.fullmatch(r"[a-zA-Z0-9_-]+", part) for part in post["id"].split("/")):
+        if not isinstance(post["id"], str) or not 0 < len(post["id"]) <= 240 or post["id"] in ids or any(part in ("", ".", "..") for part in post["id"].split("/")) or any(ord(char) < 32 or char == "\\" for char in post["id"]):
             raise ValueError("Invalid or duplicate ID")
         ids.add(post["id"])
         if not isinstance(post["url"], str) or not post["url"].startswith("/") or post["url"].startswith("//") or "\\" in post["url"]:

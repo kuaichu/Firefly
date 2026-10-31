@@ -24,7 +24,7 @@ Firefly 前端由 Cloudflare Pages 提供，GitHub Actions 构建并自动发布
 - `gameYear` 是可选的游戏发行年份，仅填写已确认的年份；不根据文章发布时间推断。
 - 新文章可通过 `pnpm new-post <文件名>` 创建，默认位于 `/posts/<文件名>/`。
 - 本地检查和预览使用 `pnpm check`、`pnpm type-check`、`pnpm build:pages`，最终产物是 `dist/`。正式发布由推送 `main` 后的 GitHub Actions 完成。
-- 未启用网页内容编辑后台；修改内容文件并推送 `main` 后，工作流自动构建发布。
+- 网页后台入口为 <https://gal.yeque.top/admin/>，使用 GitHub 登录 Pages CMS 管理游戏、图片与下载链接。保存后自动发布，首次使用需管理员仅授权本站仓库，详见 [后台使用说明](CMS.zh-CN.md)。仍可直接修改文件并推送 `main`。
 
 下载按钮可以沿用以下正文 HTML，多个版本放在同一面板内：
 

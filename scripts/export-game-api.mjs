@@ -32,15 +32,18 @@ for (const filename of await files(path.join(root, "src/content/posts"))) {
 	const id = path.relative(path.join(root, "src/content/posts"), filename).replaceAll("\\", "/").replace(/\.mdx?$/, "");
 	const slug = data.legacySlug ? encodeURIComponent(data.legacySlug) : `posts/${id.split("/").map(encodeURIComponent).join("/")}`;
 	const html = marked.parse(content, { async: false });
-	const downloads = [];
-	visit(fromHtml(html, { fragment: true }), "element", (node) => {
+	const downloads = (data.downloads || []).map(({ label, url }) => ({ label, url }));
+	if (data.downloads === undefined) visit(fromHtml(html, { fragment: true }), "element", (node) => {
 		if (node.tagName !== "a" || !node.properties.className?.includes("resource-download")) return;
 		const href = String(node.properties.href || "");
 		if (!/^https?:\/\//.test(href)) throw new Error(`Invalid download in ${id}`);
 		downloads.push({ label: plain(textOf(node)).replace(/\s*↗\s*$/, "").trim(), url: href });
-		if (apiBase) rewritten.set(href, `${apiBase}/games/${encodeURIComponent(id)}/downloads/${downloads.length - 1}`);
 	});
-	posts.push({ id, url: `/${slug}/`, title: data.title, description: data.description || "", category: data.category || "", tags: data.tags || [], gameYear: data.gameYear || null, published: new Date(data.published).toISOString(), text: plain(html).replace(/\s+/g, " ").trim(), downloads });
+	for (const [index, download] of downloads.entries()) {
+		if (typeof download.label !== "string" || !download.label.trim() || typeof download.url !== "string" || !/^https?:\/\//.test(download.url)) throw new Error(`Invalid download in ${id}`);
+		if (apiBase) rewritten.set(download.url, `${apiBase}/games/${encodeURIComponent(id)}/downloads/${index}`);
+	}
+	posts.push({ id, url: `/${slug}/`, title: data.title, description: data.description || "", category: data.category || "", tags: data.tags || [], gameYear: data.gameYear || null, published: new Date(data.published).toISOString(), text: `${plain(html)} ${(data.screenshots || []).map((image) => image.group || "").join(" ")}`.replace(/\s+/g, " ").trim(), downloads });
 	articles.set(path.join(dist, decodeURIComponent(slug), "index.html"), { id, downloads });
 }
 posts.sort((a, b) => b.published.localeCompare(a.published) || a.id.localeCompare(b.id));

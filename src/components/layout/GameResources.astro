@@ -1,0 +1,52 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+	entry: CollectionEntry<"posts">;
+}
+
+const { entry } = Astro.props;
+const { screenshots, downloads } = entry.data;
+---
+
+{screenshots && screenshots.length > 0 && (
+	<section aria-labelledby="game-screenshots">
+		<h2 id="game-screenshots">游戏截图</h2>
+		{screenshots.map((screenshot, index) => (
+			<>
+				{screenshot.group && screenshot.group !== screenshots[index - 1]?.group && <h3>{screenshot.group}</h3>}
+				<figure class="game-screenshot">
+					<img
+						src={screenshot.image}
+						alt={screenshot.alt || `${entry.data.title} 游戏截图`}
+						width={screenshot.width}
+						height={screenshot.height}
+						loading="lazy"
+						decoding="async"
+					/>
+					{screenshot.alt && <figcaption class="text-center">{screenshot.alt}</figcaption>}
+				</figure>
+			</>
+		))}
+	</section>
+)}
+
+{downloads !== undefined && (
+	<section aria-labelledby="game-downloads" data-pagefind-ignore>
+		<h2 id="game-downloads">下载资源</h2>
+		<div class="resource-downloads">
+			{downloads.length > 0 ? (
+				<>
+					<p>选择对应版本下载。</p>
+					<div class="resource-download-actions">
+						{downloads.map((download) => (
+							<a class="resource-download" href={download.url} target="_blank" rel="noopener noreferrer">
+								{download.label}<span aria-hidden="true"> ↗</span>
+							</a>
+						))}
+					</div>
+				</>
+			) : <p>暂无可用下载链接。</p>}
+		</div>
+	</section>
+)}

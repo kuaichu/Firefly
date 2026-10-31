@@ -1,6 +1,7 @@
 """Exercise real API requests locally or against a deployed API, without a browser."""
 import argparse
 import hashlib
+import html
 import importlib.util
 import json
 import pathlib
@@ -40,10 +41,15 @@ def run(base, catalog, token=None):
     posts = json.loads(raw)["posts"]
     health, _ = request("/healthz")
     assert json.loads(health)["games"] == len(posts)
-    for query, expected in [("ATRI", "ATRI"), ("恋爱", "恋爱"), ("夏之雨", "夏之雨"), ("ＡＴＲＩ", "ATRI")]:
+    examples = [(post["title"][:150], post["title"]) for post in posts[:3]]
+    ascii_post = next((post for post in posts if any(char.isascii() and char.isalnum() for char in post["title"])), None)
+    if ascii_post:
+        fullwidth = "".join(chr(ord(char) + 0xFEE0) if char.isascii() and char.isalnum() else char for char in ascii_post["title"][:150])
+        examples.append((fullwidth, ascii_post["title"]))
+    for query, expected in examples:
         body, _ = request("/search?q=" + urllib.parse.quote(query))
         results = json.loads(body)["results"]
-        assert any(expected.casefold() in item["meta"]["title"].casefold() for item in results), query
+        assert any(expected == html.unescape(item["meta"]["title"]) for item in results), query
         assert all(item["url"].startswith("/") and not item["url"].startswith("//") for item in results)
     for post in posts:
         body, _ = request(f'/games/{urllib.parse.quote(post["id"], safe="")}/downloads')
@@ -52,7 +58,9 @@ def run(base, catalog, token=None):
             _, headers = request(f'/games/{urllib.parse.quote(post["id"], safe="")}/downloads/{index}', 302, method="HEAD")
             assert headers["Location"] == download["url"], (post["id"], index)
     request("/games/unknown/downloads/0", 404)
-    request("/games/wp-209/downloads/0", 404)
+    empty = next((post for post in posts if not post["downloads"]), None)
+    if empty:
+        request(f'/games/{urllib.parse.quote(empty["id"], safe="")}/downloads/0', 404)
     request("/search?q=" + "a" * 161, 400)
     request("/search?q=test&limit=invalid", 400)
     request("/search?q=%3Cscript%3Ealert(1)%3C%2Fscript%3E")
@@ -72,6 +80,12 @@ def run(base, catalog, token=None):
         request("/catalog", data=json.dumps(updated).encode(), headers=headers)
         body, _ = request("/search?q=catalog-live-reload-probe")
         assert json.loads(body)["total"] == 1
+        for invalid_id in ["../escape", "bad\\path", "a\nb"]:
+            updated["posts"][0]["id"] = invalid_id
+            request("/catalog", 400, data=json.dumps(updated).encode(), headers=headers)
+        updated["posts"][0]["id"] = "game-测试-20300101"
+        request("/catalog", data=json.dumps(updated).encode(), headers=headers)
+        request("/games/" + urllib.parse.quote(updated["posts"][0]["id"], safe="") + "/downloads")
     print(json.dumps({"base": base, "games": len(posts), "download_redirects": sum(len(post["downloads"]) for post in posts), "http_checks": count, "issues": []}, ensure_ascii=False))
 
 

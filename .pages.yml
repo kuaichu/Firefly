@@ -1,0 +1,167 @@
+media:
+  name: images
+  label: 游戏图片
+  input: public
+  output: /
+  categories: [image]
+  extensions: [jpg, jpeg, png, webp, avif, gif]
+  rename: random
+
+content:
+  - name: games
+    label: 游戏资源
+    type: collection
+    path: src/content/posts
+    format: yaml-frontmatter
+    subfolders: false
+    filename:
+      template: "game-{year}{month}{day}-{hour}{minute}{second}.md"
+      field: false
+    operations:
+      create: true
+      rename: false
+      delete: true
+    view:
+      primary: title
+      fields: [title, image, category, published, draft]
+      search: [title, description, category, tags]
+      sort: [published, title, category]
+      default:
+        sort: published
+        order: desc
+    fields:
+      - name: title
+        label: 游戏名称
+        type: string
+        required: true
+      - name: image
+        label: 封面
+        type: image
+        description: 可选择现有图片或上传新封面。建议横版图片，单张小于 20 MB。
+        options:
+          media: images
+          path: public/covers
+          rename: random
+      - name: description
+        label: 简介摘要
+        type: text
+        description: 显示在游戏卡片和搜索结果中。
+      - name: category
+        label: 分类
+        type: string
+        description: 可填写现有分类，也可以创建新分类。
+      - name: tags
+        label: 标签或厂商
+        type: string
+        list: true
+      - name: gameYear
+        label: 游戏发行年份
+        type: number
+        description: 不确定时留空，与文章发布时间无关。
+        options:
+          min: 1900
+          max: 2100
+      - name: body
+        label: 游戏介绍与补充说明
+        type: rich-text
+        options:
+          format: markdown
+          media: images
+          path: public/uploads
+          rename: random
+      - name: screenshots
+        label: 预览截图
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "截图 {index} · {alt}"
+        fields:
+          - name: image
+            label: 图片
+            type: image
+            required: true
+            options:
+              media: images
+              path: public/game-media
+              rename: random
+          - name: alt
+            label: 图片说明
+            type: string
+          - name: group
+            label: 所属作品或版本
+            type: string
+            description: 合集可填写作品名分组；普通游戏可留空。
+          - name: width
+            type: number
+            hidden: true
+          - name: height
+            type: number
+            hidden: true
+      - name: downloads
+        label: 下载资源
+        type: object
+        description: 每个版本添加一项；游戏安装包仍放在原文件服务器，不在这里上传。
+        list:
+          collapsible:
+            collapsed: false
+            summary: "{label}"
+        fields:
+          - name: label
+            label: 按钮名称
+            type: string
+            required: true
+            description: 例如 PC版、安卓版、补丁。
+          - name: url
+            label: 下载地址
+            type: string
+            required: true
+            pattern:
+              regex: '^https?://[^\s]+$'
+              message: 请填写完整的 HTTP 或 HTTPS 地址。
+      - name: published
+        label: 文章发布时间
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ssXXX"
+      - name: updated
+        label: 最近更新
+        type: date
+        default: ""
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ssXXX"
+      - name: pinned
+        label: 首页置顶
+        type: boolean
+        default: false
+      - name: draft
+        label: 暂不公开（草稿）
+        type: boolean
+        default: false
+        description: 保存后会自动构建；草稿不会出现在网站和搜索 API 中。
+      - name: comment
+        type: boolean
+        hidden: true
+        default: false
+      - name: legacyId
+        label: 原站文章编号
+        type: number
+        hidden: true
+        readonly: true
+      - name: legacySlug
+        label: 原站固定地址
+        type: string
+        hidden: true
+        readonly: true
+
+settings:
+  content:
+    merge: true
+  commit:
+    templates:
+      create: "content: create {filename}"
+      update: "content: update {filename}"
+      delete: "content: delete {filename}"

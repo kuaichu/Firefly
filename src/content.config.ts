@@ -10,6 +10,8 @@ type PostData = {
 	gameYear?: number;
 	legacyId?: number;
 	legacySlug?: string;
+	screenshots?: { image: string; alt?: string; width?: number; height?: number; group?: string }[];
+	downloads?: { label: string; url: string }[];
 	draft: boolean;
 	description: string;
 	image: string;
@@ -66,11 +68,22 @@ const postsCollection: ContentCollection<PostData> = defineCollection({
 	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/posts" }),
 	schema: z.object({
 		title: z.string(),
-		published: z.date(),
-		updated: z.date().optional(),
-		gameYear: z.number().int().positive().optional(),
+		published: z.coerce.date(),
+		updated: z.preprocess((value) => value === "" || value === null ? undefined : value, z.coerce.date().optional()),
+		gameYear: z.preprocess((value) => value === "" || value === null ? undefined : value, z.number().int().positive().optional()),
 		legacyId: z.number().int().positive().optional(),
 		legacySlug: z.string().optional(),
+		screenshots: z.array(z.object({
+			image: z.string().refine((value) => /^(?:\/(?!\/)|https:\/\/)/.test(value), "Use a site image path or HTTPS URL"),
+			alt: z.string().optional(),
+			width: z.preprocess((value) => value === "" || value === null ? undefined : value, z.number().int().positive().optional()),
+			height: z.preprocess((value) => value === "" || value === null ? undefined : value, z.number().int().positive().optional()),
+			group: z.string().optional(),
+		})).optional(),
+		downloads: z.array(z.object({
+			label: z.string().min(1),
+			url: z.url({ protocol: /^https?$/ }),
+		})).optional(),
 		draft: z.boolean().optional().default(false),
 		description: z.string().optional().default(""),
 		image: z.string().optional().default(""),

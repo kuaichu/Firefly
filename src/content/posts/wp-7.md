@@ -9,6 +9,26 @@ legacySlug: "青鸟"
 comment: false
 published: 2024-05-01T06:00:54Z
 updated: 2024-05-01T07:34:50Z
+screenshots:
+  - image: "/wp-content/uploads/2024/05/%E9%9D%92%E9%B8%9F.png"
+    alt: "【汉化】青鸟 游戏截图"
+    width: 1282
+    height: 747
+  - image: "/wp-content/uploads/2024/05/005ODKsIgy1fx3yyjc5jyj30zm0krjvw.jpg"
+    alt: "【汉化】青鸟 游戏截图"
+    width: 1282
+    height: 747
+  - image: "/wp-content/uploads/2024/05/005ODKsIgy1fx3yyjdyy8j30zm0kr43c.jpg"
+    alt: "【汉化】青鸟 游戏截图"
+    width: 1282
+    height: 747
+  - image: "/wp-content/uploads/2024/05/005ODKsIgy1fx3yyj5fprj30zm0krwkq.jpg"
+    alt: "【汉化】青鸟 游戏截图"
+    width: 1282
+    height: 747
+downloads:
+  - label: "链接"
+    url: "https://api.yeque.top:9000/files/Purple%20software/%E9%9D%92%E9%B8%9F.7z"
 ---
 
 ## 游戏介绍
@@ -36,23 +56,13 @@ updated: 2024-05-01T07:34:50Z
 
 由那些零碎的祈祷所编织而成的、诠释着生命的物语——
 
-## 游戏截图
 
-<figure class="game-screenshot"><img src="/wp-content/uploads/2024/05/%E9%9D%92%E9%B8%9F.png" alt="【汉化】青鸟 游戏截图" loading="lazy" decoding="async" width="1282" height="747" /></figure>
 
-<figure class="game-screenshot"><img src="/wp-content/uploads/2024/05/005ODKsIgy1fx3yyjc5jyj30zm0krjvw.jpg" alt="【汉化】青鸟 游戏截图" loading="lazy" decoding="async" width="1282" height="747" /></figure>
 
-<figure class="game-screenshot"><img src="/wp-content/uploads/2024/05/005ODKsIgy1fx3yyjdyy8j30zm0kr43c.jpg" alt="【汉化】青鸟 游戏截图" loading="lazy" decoding="async" width="1282" height="747" /></figure>
 
-<figure class="game-screenshot"><img src="/wp-content/uploads/2024/05/005ODKsIgy1fx3yyj5fprj30zm0krwkq.jpg" alt="【汉化】青鸟 游戏截图" loading="lazy" decoding="async" width="1282" height="747" /></figure>
+
+
+
+
 
 封面资料：[发行商 Steam 商店](https://store.steampowered.com/app/2741260/)。
-
-## 下载资源
-
-<div class="resource-downloads" data-pagefind-ignore>
-<p>选择对应版本下载。</p>
-<div class="resource-download-actions">
-<a class="resource-download" href="https://api.yeque.top:9000/files/Purple%20software/%E9%9D%92%E9%B8%9F.7z" target="_blank" rel="noopener noreferrer">链接<span aria-hidden="true"> ↗</span></a>
-</div>
-</div>

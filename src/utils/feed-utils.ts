@@ -8,6 +8,7 @@ import { i18n } from "@i18n/translation";
 import { getPostUrlBySlug } from "@utils/url-utils";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import sanitizeHtml from "sanitize-html";
+import GameResources from "@/components/layout/GameResources.astro";
 
 /**
  * 归一化后的 feed 条目，供 RSS 与 Atom 共用。
@@ -126,7 +127,7 @@ export async function renderFeedEntries(
 			continue;
 		}
 		const { Content } = await render(post);
-		const rawContent = await container.renderToString(Content);
+		const rawContent = await container.renderToString(Content) + await container.renderToString(GameResources, { props: { entry: post } });
 		const cleanedContent = stripInvalidXmlChars(rawContent);
 		entries.push({
 			...base,

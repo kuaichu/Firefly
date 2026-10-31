@@ -2,7 +2,7 @@
 
 站点：<https://gal.yeque.top/>，服务器 `10.0.0.211`。
 
-Firefly 在本机构建；服务器由 Nginx 提供静态文件，不运行 Node.js 服务。
+Firefly 前端由 Cloudflare Pages 提供，GitHub Actions 构建并自动发布；服务器运行轻量 API，并保留迁移前的静态版本供回退，不运行 Node.js 服务。
 原 WordPress 文件和数据库保留，WordPress 专用 `php8.4-fpm` 已停止并禁用开机启动。
 图床使用的 PHP 8.2 和共享 MariaDB 继续运行。
 
@@ -12,9 +12,9 @@ Firefly 在本机构建；服务器由 Nginx 提供静态文件，不运行 Node
 
 服务器已运行 `galgame-api.service`，由 Python 标准库提供接口，监听回环地址 4323，经现有 Nginx 4321/4322 的 `/api/v1/` 转发。接口索引是 `/var/lib/galgame-api/catalog.json`，发布密钥只在服务器 `/etc/galgame-api.env`，没有写入源码。新服务不依赖 WordPress 或数据库。
 
-前端已直接上传到 Cloudflare Pages 项目 `galgame`，预览地址为 <https://galgame-5si.pages.dev/>，自定义域名 `gal.yeque.top` 已附加，但 DNS 仍未切换，正式站目前继续使用服务器静态版本。API 域名 `gal-api.yeque.top` 的 DNS CNAME 已指向现有 Cloudflare Tunnel，路由到服务器 Nginx，再代理至本机 API。GitHub Actions 自动发布已在配置中；工作流首次执行和公网端到端验证尚未确认通过。验证通过后再切换正式站 DNS。详细部署参数与操作见 [Cloudflare Pages 部署](CLOUDFLARE-PAGES.zh-CN.md)。
+前端已部署到 Cloudflare Pages 项目 `galgame`，Pages 地址为 <https://galgame-5si.pages.dev/>，正式域名 `gal.yeque.top` 已切换并激活。API 域名 `gal-api.yeque.top` 通过现有 Cloudflare Tunnel 连接服务器 Nginx，再代理至本机 API。GitHub Actions 首次自动发布已成功，记录：<https://github.com/kuaichu/Firefly/actions/runs/41209358164>。源码仓库 `main` 分支更新后，会自动检查、构建、同步 API 索引并上传 Pages。详细部署参数与操作见 [Cloudflare Pages 部署](CLOUDFLARE-PAGES.zh-CN.md)。
 
-停止新 API 可执行 `systemctl disable --now galgame-api.service`，并恢复 `.migration/api/deployment.json` 所记录服务器备份目录内的两份 Nginx 配置，然后 `nginx -t && systemctl reload nginx`。这不会切换正式前端版本。迁到 Pages 前仍应保留当前静态版本作为回退。
+正式站的搜索和下载依赖 API；仅在完成回退或停用站点后，停止 API 可执行 `systemctl disable --now galgame-api.service`，并恢复 `.migration/api/deployment.json` 所记录服务器备份目录内的两份 Nginx 配置，然后 `nginx -t && systemctl reload nginx`。这不会切换正式前端版本。原服务器静态版本继续保留供回退。
 
 ## 内容与构建
 
@@ -23,8 +23,8 @@ Firefly 在本机构建；服务器由 Nginx 提供静态文件，不运行 Node
 - 图片原路径位于 `public/wp-content/uploads/`；轻量封面位于 `public/covers/`。
 - `gameYear` 是可选的游戏发行年份，仅填写已确认的年份；不根据文章发布时间推断。
 - 新文章可通过 `pnpm new-post <文件名>` 创建，默认位于 `/posts/<文件名>/`。
-- 更新后运行 `pnpm check`、`pnpm type-check` 和 `pnpm build`，最终产物是 `dist/`。
-- 未启用网页内容编辑后台；发布流程是修改内容文件、重新构建并上传新产物。
+- 本地检查和预览使用 `pnpm check`、`pnpm type-check`、`pnpm build:pages`，最终产物是 `dist/`。正式发布由推送 `main` 后的 GitHub Actions 完成。
+- 未启用网页内容编辑后台；修改内容文件并推送 `main` 后，工作流自动构建发布。
 
 下载按钮可以沿用以下正文 HTML，多个版本放在同一面板内：
 
@@ -43,7 +43,7 @@ Firefly 在本机构建；服务器由 Nginx 提供静态文件，不运行 Node
 
 ## 发布与回退
 
-源码及 Pages 发布自动化目标仓库为 <https://github.com/kuaichu/Firefly> 的 `main` 分支。GitHub Actions 负责检查、构建、临时 API 验证、同步后端索引，并将 `dist/` 上传至现有 Pages 项目 `galgame`；Pages 项目本身使用 Wrangler 上传，不是 Pages Git 集成。自动发布尚待首次成功验证。切换正式域名 DNS 前，应先确认 Pages 预览站和公网 API 均可正常访问。
+源码及 Pages 发布自动化目标仓库为 <https://github.com/kuaichu/Firefly> 的 `main` 分支。GitHub Actions 负责检查、构建、临时 API 验证、同步后端索引，并将 `dist/` 上传至现有 Pages 项目 `galgame`；Pages 项目本身使用 Wrangler 上传，不是 Pages Git 集成。首次自动发布和公网 API 已通过验证。以下服务器 release 管理仅用于保留的回退静态站，不会更新当前 Pages 正式站。
 
 服务器目录：
 
@@ -67,7 +67,7 @@ python scripts/verify-static.py --base http://10.0.0.211:4321
 node scripts/verify-search.mjs http://10.0.0.211:4321
 ```
 
-如需恢复原 WordPress，在服务器执行：
+如需恢复原 WordPress，先在服务器执行下列命令，再将 `gal.yeque.top` 的 CNAME 恢复为 `c89be1e5-47c3-4182-8f51-2afa625260e8.cfargotunnel.com`（开启代理）：
 
 ```sh
 python3 /opt/galgame-firefly/rollback.py /var/backups/galgame-firefly-20261031-160133
